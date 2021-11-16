@@ -20,6 +20,14 @@ class EmployeeService{
         return axios.put(EMPLOYEE_API_BASE_URL + '/' + employeeId, employee);
     }
 
+    getUpperManagementEmployees() {
+        return axios.get(EMPLOYEE_API_BASE_URL + '/upperManagement' );
+    }
+
+    deleteEmployee(employeeId) {
+        return axios.delete(EMPLOYEE_API_BASE_URL + '/' + employeeId);
+    }
+
 }
 
 export default new EmployeeService()

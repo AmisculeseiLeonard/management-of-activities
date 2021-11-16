@@ -7,32 +7,45 @@ import Button from 'react-bootstrap/Button';
 import {Container} from 'react-bootstrap';
 import { useHistory } from "react-router-dom";
 import {MdDeleteForever} from 'react-icons/md'
+import TeamService from '../services/TeamService';
 
-function ListEmployeeComponent() {
+function ListTeamComponent() {
 
-    const [employees, setEmployees] = useState([]);
+    const [teams, setTeams] = useState([]);
     const history = useHistory();
 
-    function addEmployee() {
-        history.push('/add-employee');
-    }
 
     const columns = [
         {dataField: 'id', text: 'Id'},
-        {dataField: 'firstName', text: 'First name', sort: true},
-        {dataField: 'lastName', text: 'Last name',sort: true},
-        {dataField: 'role.roleName', text: 'Role'},
+        {dataField: 'name', text: 'Name', sort: true},
+        {dataField: 'teamDescription', text: 'Description',sort: true},
+        {
+            dataField: "teamLeader.firstName",
+            text: "Team leader",
+            formatter: (cell, row) => {
+              console.log(row);
+              return <div>{`${row.teamLeader.firstName} ${row.teamLeader.lastName}`}</div>;
+            }
+          },
         { dataField: 'remove', text: 'Delete', 
         formatter: (cellContent, row) => {
             return (
               <MdDeleteForever color='red' 
                 onClick={() => handleDelete(row.id, row.name)}
               >
-                
               </MdDeleteForever>
             );
           }}
     ];
+
+    useEffect(() => {
+        TeamService.getTeams()
+        .then((res) =>{
+            setTeams(res.data);
+            console.log(res.data);
+        }).catch(error => console.log(error))
+    }, []);
+
 
     const pagination = paginationFactory({
         page: 1,
@@ -53,31 +66,16 @@ function ListEmployeeComponent() {
         }
     });
 
-    const rowEvents = {
-        onClick: (e,row) => {
-            //console.log(row)
-            history.push({
-                pathname: `/update-employee/${row.id}`,
-                state: {row: row}
-            });
-        },
-    }
-
     const handleDelete = (rowId, name) => {
         console.log(rowId, name);
         
       };
 
-    useEffect(() => {
-        EmployeeService.getEmployees()
-        .then((res) =>{
-            setEmployees(res.data);
-        }).catch(error => console.log(error))
-    }, []);
+    
 
     return (
-        <div >
-            <Container style={{
+        <div>
+             <Container style={{
                 width: "100%",
                 marginTop: 50,
                 paddingLeft: 75,
@@ -89,13 +87,13 @@ function ListEmployeeComponent() {
                 boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
                 backgroundColor: "#F4F7F9"
             }}>
-            <h2 className="text-center">Employee list</h2>
-            <Button variant="secondary" style={{margin: "15px 0px"}} onClick={addEmployee} >Add Employee</Button>
-            <BootstrapTable bootstrap4 keyField='id' columns={columns} data={employees} hover bordered
-                pagination={pagination} rowEvents={rowEvents}/>
+            <h2 className="text-center">Teams list</h2>
+            {/* <Button variant="secondary" style={{margin: "15px 0px"}} onClick={addEmployee} >Add Employee</Button> */}
+            <BootstrapTable bootstrap4 keyField='id' columns={columns} data={teams} hover bordered
+                pagination={pagination} />
             </Container>
         </div>
     )
 }
 
-export default ListEmployeeComponent
+export default ListTeamComponent
