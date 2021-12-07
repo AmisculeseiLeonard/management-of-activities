@@ -11,6 +11,15 @@ class TeamService{
     createTeam(team) {
        return axios.post(TEAM_API_BASE_URL, team);
     }
+
+    updateTeam(team, teamId){
+        return axios.put(TEAM_API_BASE_URL + '/' + teamId, team)
+    }
+
+    deleteTeam(teamId) {
+        return axios.delete(TEAM_API_BASE_URL + '/' + teamId)
+    }
+        
 }
 
 export default new TeamService()

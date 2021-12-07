@@ -21,17 +21,7 @@ function ListEmployeeComponent() {
         {dataField: 'id', text: 'Id'},
         {dataField: 'firstName', text: 'First name', sort: true},
         {dataField: 'lastName', text: 'Last name',sort: true},
-        {dataField: 'role.roleName', text: 'Role'},
-        { dataField: 'remove', text: 'Delete', 
-        formatter: (cellContent, row) => {
-            return (
-              <MdDeleteForever color='red' 
-                onClick={() => handleDelete(row.id, row.name)}
-              >
-                
-              </MdDeleteForever>
-            );
-          }}
+        {dataField: 'role.roleName', text: 'Role'}
     ];
 
     const pagination = paginationFactory({

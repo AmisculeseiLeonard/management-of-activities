@@ -47,6 +47,7 @@ function CreateEmployeeComponent() {
 
 
 
+
     return (
         <div>
             <div style={{ display: "flex", justifyContent: "center", margin: "20px 0" }}>
@@ -104,6 +105,8 @@ function CreateEmployeeComponent() {
 
                     <Row>
                         <Col>
+                        <Form.Group className="mb-3" >
+                        <Form.Label>Select role</Form.Label>
                             <Form.Select aria-label="Default select example"
                                 onChange={ev => setRole({ id: ev.target.value, roleName: roles.find(role => role.id == ev.target.value).roleName })}
                             >
@@ -111,8 +114,11 @@ function CreateEmployeeComponent() {
                                     return <option key={role.id} value={role.id}>{role.roleName}</option>
                                 })}
                             </Form.Select>
+                            </Form.Group>
                         </Col>
                         <Col>
+                        <Form.Group className="mb-3" >
+                        <Form.Label>Select birth date</Form.Label>
                             <DatePicker
                                 id="datePicker-1"
                                 value={date}
@@ -120,12 +126,16 @@ function CreateEmployeeComponent() {
                                 // label="DatePicker Label"
                                 formatStyle="large"
                             />
+                            
+                            </Form.Group>
                         </Col>
+                        
                     </Row>
                     <div style={{ display: "flex", justifyContent: "center", margin: "20px 0" }}>
                         <Button variant="primary" type="submit" onClick={saveEmployee} >
                             Submit
                         </Button>
+
                     </div>
 
                 </Form>

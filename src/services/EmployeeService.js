@@ -28,6 +28,10 @@ class EmployeeService{
         return axios.delete(EMPLOYEE_API_BASE_URL + '/' + employeeId);
     }
 
+    getTeams(employeeId){
+        return axios.get(EMPLOYEE_API_BASE_URL + '/' + employeeId + '/teams');
+    }
+
 }
 
 export default new EmployeeService()

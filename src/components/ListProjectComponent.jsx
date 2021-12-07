@@ -1,44 +1,24 @@
 import React from 'react'
-import { useState, useEffect } from 'react';
-import EmployeeService from '../services/EmployeeService';
+import {useState, useEffect} from 'react'
+import { useHistory } from "react-router-dom";
+import ProjectService from '../services/ProjectService';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import BootstrapTable from 'react-bootstrap-table-next';
 import Button from 'react-bootstrap/Button';
 import {Container} from 'react-bootstrap';
-import { useHistory } from "react-router-dom";
-import {MdDeleteForever} from 'react-icons/md'
-import TeamService from '../services/TeamService';
 
-function ListTeamComponent() {
-
-    const [teams, setTeams] = useState([]);
+function ListProjectComponent() {
+    const [projects, setProjects] = useState([]);
     const history = useHistory();
-
-    const addTeam = () => {
-      history.push("/create-team");
-    }
 
     const columns = [
         {dataField: 'id', text: 'Id'},
-        {dataField: 'name', text: 'Name', sort: true},
-        {dataField: 'teamDescription', text: 'Description',sort: true},
-        {
-            dataField: "teamLeader.firstName",
-            text: "Team leader",
-            formatter: (cell, row) => {
-              return <div>{`${row.teamLeader.firstName} ${row.teamLeader.lastName}`}</div>;
-            }
-          }
+        {dataField: 'projectName', text: 'Project name', sort: true},
+        {dataField: 'description', text: 'Description',sort: true},
+        {dataField: 'product.productName', text: 'Product',sort: true},
+        {dataField: 'buildPriority.priority', text: 'Priority'}
+        
     ];
-
-    useEffect(() => {
-        TeamService.getTeams()
-        .then((res) =>{
-            setTeams(res.data);
-            console.log(res.data);
-        }).catch(error => console.log(error))
-    }, []);
-
 
     const pagination = paginationFactory({
         page: 1,
@@ -59,22 +39,25 @@ function ListTeamComponent() {
         }
     });
 
-    const handleDelete = (rowId, name) => {
-        console.log(rowId, name);
-        
-      };
-
-      const rowEvents = {
+    const rowEvents = {
         onClick: (e,row) => {
             //console.log(row)
             history.push({
-                pathname: `/update-team/${row.id}`,
+                pathname: `/update-project/${row.id}`,
                 state: {row: row}
             });
         },
     }
 
-    
+    useEffect(() => {
+        ProjectService.getProjects()
+         .then(res => setProjects(res.data))
+         .catch(error => console.log(error));
+    },[]);
+
+    const addProject = () => {
+        history.push("/create-project");
+      }
 
     return (
         <div>
@@ -90,14 +73,14 @@ function ListTeamComponent() {
                 boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
                 backgroundColor: "#F4F7F9"
             }}>
-            <h2 className="text-center">Teams list</h2>
+            <h2 className="text-center">Projects list</h2>
            
-            <Button variant="secondary" style={{margin: "15px 0px"}} onClick={addTeam} >Create Team</Button>
-            <BootstrapTable bootstrap4 keyField='id' columns={columns} data={teams} hover bordered
+            <Button variant="secondary" style={{margin: "15px 0px"}} onClick={addProject} >Create Project</Button>
+            <BootstrapTable bootstrap4 keyField='id' columns={columns} data={projects} hover bordered
                 pagination={pagination} rowEvents={rowEvents}/>
             </Container>
         </div>
     )
 }
 
-export default ListTeamComponent
+export default ListProjectComponent

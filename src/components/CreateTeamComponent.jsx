@@ -20,7 +20,7 @@ function CreateTeamComponent() {
 
     useEffect(() => {
         EmployeeService.getUpperManagementEmployees()
-            .then(res => { setUpperManagementEmployees(res.data); setTeamLeaderId(res.data[0].id); console.log(res.data) })
+            .then(res => { setUpperManagementEmployees(res.data);  console.log(res.data) })
             .catch(error => console.log(error));
 
             EmployeeService.getEmployees()
@@ -41,10 +41,6 @@ function CreateTeamComponent() {
         setMembers([...members, teamEmployees.find(employee => employee.id == id)]);
         let updatedEmployeeList = teamEmployees.filter(employee => employee.id != id);
         setEmployees(updatedEmployeeList);
-        console.log('Employees')
-        console.log(teamEmployees);
-        console.log('Members')
-        console.log(members)
     }
 
 
@@ -56,7 +52,7 @@ function CreateTeamComponent() {
             employees: members
         }
         //console.log(members);
-        TeamService.createTeam(team);
+        TeamService.createTeam(team).then(res => history.push("/teams"));
     }
 
     return (
@@ -93,6 +89,7 @@ function CreateTeamComponent() {
                                 <Form.Select aria-label="Default select example"
                                     onChange={ev => setTeamLeaderId(ev.target.value)}
                                 >
+                                    <option>Select team leader</option>
 
                                     {upperManagementEmployees.map((employee) => {
                                         return <option key={employee.id} value={employee.id}>{employee.firstName} {employee.lastName}</option>
@@ -116,7 +113,7 @@ function CreateTeamComponent() {
                                 <Form.Label>Select team members</Form.Label>
                                 <Form.Select aria-label="Default select example"
                                     onChange={ev => selectMembers(ev.target.value)}
-                                >
+                                >     <option>Add a member to team</option>
                                     {teamEmployees.map((employee) => {
                                         return <option key={employee.id} value={employee.id}>{employee.firstName} {employee.lastName}</option>
                                     })}
